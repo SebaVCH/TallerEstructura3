@@ -1,9 +1,11 @@
 #include <iostream>
+#include "../include/arbolAVL.h"
+
 
 using namespace std;
 
 //Menu
-void mostrarMenu();
+void mostrarMenu(arbolAVL avl);
 
 //Cargar y guardar datos
 
@@ -11,11 +13,13 @@ void mostrarMenu();
 
 
 int main() {
-    mostrarMenu();
+
+    arbolAVL arbolTransacciones;
+    mostrarMenu(arbolTransacciones);
     return 0;
 }
 
-void mostrarMenu() {
+void mostrarMenu(arbolAVL avl) {
     int opcion;
 
     do {
@@ -33,6 +37,8 @@ void mostrarMenu() {
             case 1:
                 break;
             case 2:
+
+                avl.buscarNodo();
                 break;
             case 3:
                 break;

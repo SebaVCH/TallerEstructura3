@@ -11,16 +11,16 @@ using namespace std;
 class transaccion {
 
 private:
-    int ID;
+    string ID;
     string cuenta_origen;
     string cuenta_destino;
     double monto;
     string fecha_hora;
 
 public:
-    transaccion(int id, string origen, string destino, double monto, string fechaHora);
+    transaccion(string id, string origen, string destino, double monto, string fechaHora);
 
-    int getID();
+    string getID();
     string getCuentaOrigen();
     string getCuentaDestino();
     double getMonto();

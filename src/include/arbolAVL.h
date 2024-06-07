@@ -26,9 +26,9 @@ public:
     Nodo* rotacionRL(Nodo* nodo);
 
     //Funciones importantes
-    Nodo* insertar(Nodo* raiz, transaccion* transa);
-    Nodo* eliminar(Nodo* raiz, int id);
-    bool buscar(Nodo* raiz, int id);
+    Nodo* insertarNodo(Nodo* raiz, transaccion* transa);
+    Nodo* eliminarNodo(Nodo* raiz, string id);
+    bool buscarNodo(Nodo* raiz, string id);
     void inorder(Nodo* raiz);
 
     arbolAVL();

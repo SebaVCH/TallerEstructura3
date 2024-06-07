@@ -5,7 +5,7 @@
 #include "../include/transaccion.h"
 
 // Constructor
-transaccion::transaccion(int id, string origen, string destino, double monto, string fechaHora) {
+transaccion::transaccion(string id, string origen, string destino, double monto, string fechaHora) {
     ID = id;
     cuenta_origen = origen;
     cuenta_destino = destino;
@@ -13,7 +13,7 @@ transaccion::transaccion(int id, string origen, string destino, double monto, st
     fecha_hora = fechaHora;
 }
 
-int transaccion::getID() {
+string transaccion::getID() {
     return ID;
 }
 

@@ -61,3 +61,14 @@ arbolAVL::~arbolAVL() {
 
 }
 
+bool arbolAVL::buscarNodo(Nodo *raiz, string id) {
+    if(raiz == nullptr) return false;
+    if (id == raiz->transa->getID()){
+        return true;
+    } if (id < raiz->transa->getID()) {
+        return buscarNodo(raiz->izquierdo,id);
+    }
+    return buscarNodo(raiz->derecho,id);
+
+}
+
