@@ -1,0 +1,3 @@
+D:/CLionProjects/TallerEstructura3/cmake-build-debug/CMakeFiles/TallerEstructura3.dir
+D:/CLionProjects/TallerEstructura3/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/CLionProjects/TallerEstructura3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
