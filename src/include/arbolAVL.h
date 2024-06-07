@@ -31,6 +31,9 @@ public:
     bool buscar(Nodo* raiz, int id);
     void inorder(Nodo* raiz);
 
+    arbolAVL();
+    ~arbolAVL();
+
 };
 
 

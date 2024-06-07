@@ -49,3 +49,15 @@ Nodo *arbolAVL::rotacionRL(Nodo *nodo) {
     return rotacionRR(nodo);
 }
 
+arbolAVL::arbolAVL() {
+
+    raiz = nullptr;
+
+}
+
+arbolAVL::~arbolAVL() {
+
+    delete raiz;
+
+}
+
