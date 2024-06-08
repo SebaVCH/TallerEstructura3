@@ -88,7 +88,34 @@ Nodo *arbolAVL::insertarNodo(Nodo *raiz, transaccion *transa) {
 
     if (raiz == nullptr) return new Nodo(transa);
 
+    if (transa->getID() < raiz->transa->getID()) {
+        raiz->izquierdo = insertarNodo(raiz->izquierdo,transa);
+    }
+    if (transa->getID() > raiz->transa->getID()) {
+        raiz->derecho = insertarNodo(raiz->derecho,transa);
+    } else {
+        return raiz;
+    }
 
+    raiz->altura = 1 + max(obtenerAltura(raiz->izquierdo), obtenerBalance(raiz->derecho));
+    int balance = obtenerBalance(raiz);
+
+    if(balance > 1 && transa->getID() < raiz->izquierdo->transa->getID()){
+        return rotacionLL(raiz);
+    } if(balance < -1 && transa->getID() > raiz->derecho->transa->getID()){
+        return rotacionRR(raiz);
+    }if(balance > 1 && transa->getID() > raiz->izquierdo->transa->getID()){
+        return rotacionLR(raiz);
+    } if(balance < -1 && transa->getID() < raiz->derecho->transa->getID()){
+        return rotacionRL(raiz);
+    }
+
+    return raiz;
+
+}
+
+void arbolAVL::insertar(transaccion *transa) {
+    raiz = insertarNodo(raiz,transa);
 }
 
 

@@ -5,21 +5,23 @@
 using namespace std;
 
 //Menu
-void mostrarMenu(arbolAVL avl);
+void mostrarMenu(arbolAVL& avl);
 
 //Cargar y guardar datos
 
 //Funciones a utilizar
-
+void agregarNuevaTransa(arbolAVL& avl);
 
 int main() {
 
     arbolAVL arbolTransacciones;
     mostrarMenu(arbolTransacciones);
+
+    cout << "Hola" << endl;
     return 0;
 }
 
-void mostrarMenu(arbolAVL avl) {
+void mostrarMenu(arbolAVL& avl) {
     int opcion;
 
     do {
@@ -35,10 +37,9 @@ void mostrarMenu(arbolAVL avl) {
 
         switch (opcion) {
             case 1:
+                agregarNuevaTransa(avl);
                 break;
             case 2:
-
-                avl.buscarNodo();
                 break;
             case 3:
                 break;
@@ -54,4 +55,12 @@ void mostrarMenu(arbolAVL avl) {
                 break;
         }
     } while (opcion != 6);
+}
+
+void agregarNuevaTransa(arbolAVL& avl) {
+
+
+    transaccion* nuevaTransa = new transaccion("001","Juan","Pedro",1000,"08-06-2024 13:34");
+    avl.insertar(nuevaTransa);
+
 }
