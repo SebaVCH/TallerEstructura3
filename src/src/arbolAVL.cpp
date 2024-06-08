@@ -40,12 +40,12 @@ Nodo *arbolAVL::rotacionRR(Nodo *nodo) {
 }
 
 Nodo *arbolAVL::rotacionLR(Nodo *nodo) {
-    Nodo* nuevaRaiz = rotacionRR(nodo->izquierdo);
+    rotacionRR(nodo->izquierdo);
     return rotacionLL(nodo);
 }
 
 Nodo *arbolAVL::rotacionRL(Nodo *nodo) {
-    Nodo* nuevaRaiz = rotacionLL(nodo->derecho);
+    rotacionLL(nodo->derecho);
     return rotacionRR(nodo);
 }
 
@@ -71,4 +71,28 @@ bool arbolAVL::buscarNodo(Nodo *raiz, string id) {
     return buscarNodo(raiz->derecho,id);
 
 }
+
+Nodo *arbolAVL::encontrarMinimo(Nodo *nodo) {
+
+    Nodo* actual = nodo;
+
+    while(actual->izquierdo != nullptr){
+        actual = actual->izquierdo;
+    }
+
+    return actual;
+
+}
+
+Nodo *arbolAVL::insertarNodo(Nodo *raiz, transaccion *transa) {
+
+    if (raiz == nullptr) return new Nodo(transa);
+
+
+}
+
+
+
+
+
 
