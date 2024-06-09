@@ -117,6 +117,70 @@ Nodo *arbolAVL::insertarNodo(Nodo *raiz, transaccion *transa) {
 void arbolAVL::insertar(transaccion *transa) {
     raiz = insertarNodo(raiz,transa);
 }
+bool arbolAVL::buscar(string id) {
+    bool encontrado = buscarNodo(raiz, id);
+    if (encontrado) {
+        return true;
+    }
+    return false;
+}
+
+bool arbolAVL::eliminar(string id) {
+    bool eliminado = false;
+    raiz = eliminarNodo(raiz, id, eliminado);
+    return eliminado;
+}
+
+Nodo* arbolAVL::eliminarNodo(Nodo* raiz, string id, bool eliminado) {
+    if (raiz == nullptr) return raiz;
+
+    if (id < raiz->transa->getID()) {
+        raiz->izquierdo = eliminarNodo(raiz->izquierdo, id, eliminado);
+    } else if (id > raiz->transa->getID()) {
+        raiz->derecho = eliminarNodo(raiz->derecho, id, eliminado);
+    } else {
+        eliminado = true;
+        if (raiz->izquierdo == nullptr && raiz->derecho == nullptr) {
+            delete raiz;
+            raiz = nullptr;
+        } else if (raiz->izquierdo == nullptr) {
+            Nodo* temp = raiz->derecho;
+            delete raiz;
+            raiz = temp;
+        } else if (raiz->derecho == nullptr) {
+            Nodo* temp = raiz->izquierdo;
+            delete raiz;
+            raiz = temp;
+        } else {
+            Nodo* temp = encontrarMinimo(raiz->derecho);
+            raiz->transa = temp->transa;
+            raiz->derecho = eliminarNodo(raiz->derecho, temp->transa->getID(), eliminado);
+        }
+    }
+
+    if (raiz == nullptr) return raiz;
+
+    raiz->altura = 1 + max(obtenerAltura(raiz->izquierdo), obtenerAltura(raiz->derecho));
+
+    int balance = obtenerBalance(raiz);
+
+    if (balance > 1 && obtenerBalance(raiz->izquierdo) >= 0) {
+        return rotacionLL(raiz);
+    }
+    if (balance > 1 && obtenerBalance(raiz->izquierdo) < 0) {
+        return rotacionLR(raiz);
+    }
+    if (balance < -1 && obtenerBalance(raiz->derecho) <= 0) {
+        return rotacionRR(raiz);
+    }
+    if (balance < -1 && obtenerBalance(raiz->derecho) > 0) {
+        return rotacionRL(raiz);
+    }
+
+    return raiz;
+}
+
+
 
 
 

@@ -26,7 +26,7 @@ private:
 
     //Metodos importantes
     Nodo* insertarNodo(Nodo* raiz, transaccion* transa);
-    Nodo* eliminarNodo(Nodo* raiz, string id);
+    Nodo* eliminarNodo(Nodo* raiz, string id, bool eliminado);
     bool buscarNodo(Nodo* raiz,string id);
 
 public:
@@ -36,7 +36,7 @@ public:
 
     //Acciones principales
     void insertar(transaccion* transa);
-    void eliminar(string id);
+    bool eliminar(string id);
     bool buscar(string id);
     void inorder();
 
