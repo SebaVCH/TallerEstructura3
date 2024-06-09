@@ -131,7 +131,7 @@ bool arbolAVL::eliminar(string id) {
     return eliminado;
 }
 
-Nodo* arbolAVL::eliminarNodo(Nodo* raiz, string id, bool eliminado) {
+Nodo* arbolAVL::eliminarNodo(Nodo* raiz, string id, bool& eliminado) {
     if (raiz == nullptr) return raiz;
 
     if (id < raiz->transa->getID()) {
