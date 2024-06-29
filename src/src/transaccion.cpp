@@ -32,3 +32,19 @@ double transaccion::getMonto() {
 string transaccion::getFechaHora() {
     return fecha_hora;
 }
+
+void transaccion::setCuentaOrigen(string cuentaOrigen) {
+    cuenta_origen = cuentaOrigen;
+}
+
+void transaccion::setCuentaDestino(string cuentaDestino) {
+    cuenta_destino = cuentaDestino;
+}
+
+void transaccion::setMonto(double monto) {
+    transaccion::monto = monto;
+}
+
+void transaccion::setFechaHora(string fechaHora) {
+    fecha_hora = fechaHora;
+}

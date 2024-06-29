@@ -10,6 +10,8 @@ void mostrarMenu(arbolAVL*& avl);
 void agregarNuevaTransa(arbolAVL*& avl);
 void buscarTransa(arbolAVL*& avl);
 void eliminarTransa(arbolAVL*& avl);
+void modificarTransa(arbolAVL*& avl);
+
 
 int main() {
     arbolAVL* arbolTransacciones = new arbolAVL();
@@ -19,7 +21,7 @@ int main() {
     return 0;
 }
 
-void mostrarMenu(arbolAVL*& avl) {
+void mostrarMenu(arbolAVL* &avl) {
     int opcion;
 
     do {
@@ -49,6 +51,7 @@ void mostrarMenu(arbolAVL*& avl) {
 
                 switch (opcion) {
                     case 1:
+                        modificarTransa(avl);
                         break;
                     case 2:
                         eliminarTransa(avl);
@@ -86,6 +89,41 @@ void eliminarTransa(arbolAVL*& avl) {
         cout << "No se ha borrado nada dado que la transaccion no existe." << endl;
     }
 }
+void modificarTransa(arbolAVL*& avl) {
+    string idTransaccion;
+    cout << "Ingrese ID de la transaccion a modificar: ";
+    cin >> idTransaccion;
+
+    Nodo* transaAModificar = avl->buscar(idTransaccion);
+
+    if (transaAModificar == nullptr) {
+        cout << "Error: Transaccion con ID " << idTransaccion << " no encontrada." << endl;
+        return;
+    }
+
+    string nuevaCuentaOrigen;
+    cout << "Ingrese nuevo numero de cuenta de origen (actual: " << transaAModificar->transa->getCuentaOrigen() << "): ";
+    cin >> nuevaCuentaOrigen;
+
+    string nuevaCuentaDestino;
+    cout << "Ingrese nuevo numero de cuenta de destino (actual: " << transaAModificar->transa->getCuentaDestino() << "): ";
+    cin >> nuevaCuentaDestino;
+
+    double nuevoMonto;
+    cout << "Ingrese nuevo monto de la transaccion (actual: " << transaAModificar->transa->getMonto() << "): ";
+    cin >> nuevoMonto;
+
+    string nuevaFechaHora;
+    cout << "Ingrese nueva fecha y hora (actual: " << transaAModificar->transa->getFechaHora() << "): ";
+    cin >> nuevaFechaHora;
+
+    transaAModificar->transa->setCuentaOrigen(nuevaCuentaOrigen);
+    transaAModificar->transa->setCuentaDestino(nuevaCuentaDestino);
+    transaAModificar->transa->setMonto(nuevoMonto);
+    transaAModificar->transa->setFechaHora(nuevaFechaHora);
+
+    cout << "Transaccion con ID " << idTransaccion << " modificada exitosamente." << endl;
+}
 
 void buscarTransa(arbolAVL*& avl) {
     string ID;
@@ -100,6 +138,27 @@ void buscarTransa(arbolAVL*& avl) {
 }
 
 void agregarNuevaTransa(arbolAVL*& avl) {
-    transaccion* nuevaTransa = new transaccion("001", "Juan", "Pedro", 1000, "08-06-2024 13:34");
+    string ID;
+    cout << "Ingrese ID de la transaccion: ";
+    cin >> ID;
+
+    string cuenta_origen;
+    cout << "Ingrese numero de cuenta de origen: ";
+    cin >> cuenta_origen;
+
+    string cuenta_destino;
+    cout << "Ingrese numero de cuenta de destino: ";
+    cin >> cuenta_destino;
+
+    double monto;
+    cout << "Ingrese monto de la transaccion: ";
+    cin >> monto;
+
+    string fecha_hora;
+    cout << "Ingrese fecha y hora: ";
+    cin >> fecha_hora;
+
+    transaccion* nuevaTransa = new transaccion(ID, cuenta_origen, cuenta_destino, monto, fecha_hora);
+
     avl->insertar(nuevaTransa);
 }

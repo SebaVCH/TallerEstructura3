@@ -25,6 +25,12 @@ public:
     string getCuentaDestino();
     double getMonto();
     string getFechaHora();
+
+    void setCuentaOrigen(string cuentaOrigen);
+    void setCuentaDestino(string cuentaDestino);
+    void setMonto(double monto);
+    void setFechaHora(string fechaHora);
+
 };
 
 #endif //TALLERESTRUCTURA3_TRANSACCION_H

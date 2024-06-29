@@ -61,15 +61,16 @@ arbolAVL::~arbolAVL() {
 
 }
 
-bool arbolAVL::buscarNodo(Nodo *raiz, string id) {
-    if(raiz == nullptr) return false;
-    if (id == raiz->transa->getID()){
-        return true;
-    } if (id < raiz->transa->getID()) {
-        return buscarNodo(raiz->izquierdo,id);
-    }
-    return buscarNodo(raiz->derecho,id);
+Nodo* arbolAVL::buscarNodo(Nodo* raiz, string id) {
+    if (raiz == nullptr) return nullptr;
 
+    if (id == raiz->transa->getID()) {
+        return raiz;
+    } else if (id < raiz->transa->getID()) {
+        return buscarNodo(raiz->izquierdo, id);
+    } else {
+        return buscarNodo(raiz->derecho, id);
+    }
 }
 
 Nodo *arbolAVL::encontrarMinimo(Nodo *nodo) {
@@ -117,12 +118,9 @@ Nodo *arbolAVL::insertarNodo(Nodo *raiz, transaccion *transa) {
 void arbolAVL::insertar(transaccion *transa) {
     raiz = insertarNodo(raiz,transa);
 }
-bool arbolAVL::buscar(string id) {
-    bool encontrado = buscarNodo(raiz, id);
-    if (encontrado) {
-        return true;
-    }
-    return false;
+Nodo* arbolAVL::buscar(string id) {
+    Nodo* nodoEncontrado = buscarNodo(raiz, id);
+    return nodoEncontrado;
 }
 
 bool arbolAVL::eliminar(string id) {
