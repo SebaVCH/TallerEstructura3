@@ -1,10 +1,12 @@
-001,Juan,Pedro,1000,08-06-2024 13:34
-002,Maria,Lucia,250,08-06-2024 14:45
-003,Carlos,Ana,300,08-06-2024 15:10
-004,Luis,Sofia,500,08-06-2024 16:22
-005,Jorge,Marta,750,08-06-2024 17:30
-006,Laura,Miguel,200,08-06-2024 18:15
-007,Andres,Roberto,900,08-06-2024 19:05
-008,Elena,Fernando,1200,08-06-2024 20:00
-009,Patricia,Alejandro,650,08-06-2024 21:45
-010,Ricardo,Daniela,800,08-06-2024 22:10
+001,Juan,Pedro,1000,08-06-2024
+002,Maria,Lucia,250,08-06-2024
+003,Carlos,Ana,300,08-06-2024
+004,Luis,Sofia,500,08-06-2024
+005,Jorge,Marta,750,08-06-2024
+006,Laura,Miguel,200,08-06-2024
+007,Andres,Roberto,900,08-06-2024
+008,Elena,Fernando,1200,08-06-2024
+009,Patricia,Alejandro,650,08-06-2024
+010,Ricardo,Daniela,800,08-06-2024
+11,Farfencho,Farfencha,5e+06,30-06-2024
+12,Olga,Algo,12000,31-06-2024

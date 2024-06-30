@@ -1,7 +1,16 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "../include/arbolAVL.h"
 
 using namespace std;
+//g++ src/src/*.cpp -o taller
+//./taller
+
+//3 lugares donde se pide la ruta del txt
+//"D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt"
+
 
 // Menu
 void mostrarMenu(arbolAVL*& avl);
@@ -11,10 +20,12 @@ void agregarNuevaTransa(arbolAVL*& avl);
 void buscarTransa(arbolAVL*& avl);
 void eliminarTransa(arbolAVL*& avl);
 void modificarTransa(arbolAVL*& avl);
-
+void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo);
+void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nuevaTransa);
 
 int main() {
     arbolAVL* arbolTransacciones = new arbolAVL();
+    cargarTransaccionesDesdeArchivo(arbolTransacciones, "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
     mostrarMenu(arbolTransacciones);
 
     delete arbolTransacciones;
@@ -78,6 +89,11 @@ void mostrarMenu(arbolAVL* &avl) {
     } while (opcion != 6);
 }
 
+
+
+
+
+
 void eliminarTransa(arbolAVL*& avl) {
     string ID;
     cout << "Indique el ID de la transaccion a eliminar: ";
@@ -138,9 +154,16 @@ void buscarTransa(arbolAVL*& avl) {
 }
 
 void agregarNuevaTransa(arbolAVL*& avl) {
-    string ID;
-    cout << "Ingrese ID de la transaccion: ";
-    cin >> ID;
+    // Generar ID automáticamente
+    ifstream archivo("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+    string linea;
+    int id = 0;
+    while (getline(archivo, linea)) {
+        id++;
+    }
+    archivo.close();
+
+    string ID = to_string(id + 1);
 
     string cuenta_origen;
     cout << "Ingrese numero de cuenta de origen: ";
@@ -159,6 +182,50 @@ void agregarNuevaTransa(arbolAVL*& avl) {
     cin >> fecha_hora;
 
     transaccion* nuevaTransa = new transaccion(ID, cuenta_origen, cuenta_destino, monto, fecha_hora);
-
     avl->insertar(nuevaTransa);
+    guardarTransaccionEnArchivo("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
+
+    cout << "Transaccion agregada exitosamente con ID: " << ID << endl;
+}
+
+void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo) {
+    ifstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo de transacciones." << endl;
+        return;
+    }
+
+    string linea, id, cuentaOrigen, cuentaDestino, fechaHora;
+    double monto;
+    while (getline(archivo, linea)) {
+        stringstream ss(linea);
+        getline(ss, id, ',');
+        getline(ss, cuentaOrigen, ',');
+        getline(ss, cuentaDestino, ',');
+        ss >> monto;
+        ss.ignore(1, ',');
+        getline(ss, fechaHora);
+
+        transaccion* transa = new transaccion(id, cuentaOrigen, cuentaDestino, monto, fechaHora);
+        avl->insertar(transa);
+    }
+
+    archivo.close();
+}
+
+void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nuevaTransa) {
+    ofstream archivo(nombreArchivo, ios::app);
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo de transacciones." << endl;
+        return;
+    }
+
+    archivo << endl
+            << nuevaTransa->getID() << ','
+            << nuevaTransa->getCuentaOrigen() << ','
+            << nuevaTransa->getCuentaDestino() << ','
+            << nuevaTransa->getMonto() << ','
+            << nuevaTransa->getFechaHora();
+
+    archivo.close();
 }
