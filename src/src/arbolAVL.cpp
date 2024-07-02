@@ -178,6 +178,10 @@ Nodo* arbolAVL::eliminarNodo(Nodo* raiz, string id, bool& eliminado) {
     return raiz;
 }
 
+Nodo *arbolAVL::obtenerRaiz() {
+    return raiz;
+}
+
 
 
 

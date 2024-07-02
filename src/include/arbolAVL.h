@@ -38,9 +38,7 @@ public:
     void insertar(transaccion* transa);
     bool eliminar(string id);
     Nodo* buscar(string id);
-
-    //Recorrido
-    void inorder(Nodo* nodo);
+    Nodo* obtenerRaiz();
 
 };
 
