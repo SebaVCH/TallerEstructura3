@@ -16,21 +16,22 @@ private:
     string cuenta_destino;
     double monto;
     string fecha_hora;
-
+    string Lugar;
 public:
-    transaccion(string id, string origen, string destino, double monto, string fechaHora);
+    transaccion(string id, string origen, string destino, double monto, string fechaHora, string lugar);
 
     string getID();
     string getCuentaOrigen();
     string getCuentaDestino();
     double getMonto();
     string getFechaHora();
+    string getLugar();
 
     void setCuentaOrigen(string cuentaOrigen);
     void setCuentaDestino(string cuentaDestino);
     void setMonto(double monto);
     void setFechaHora(string fechaHora);
-
+    void setLugar(string lugar);
 };
 
 #endif //TALLERESTRUCTURA3_TRANSACCION_H

@@ -162,10 +162,15 @@ void modificarTransa(arbolAVL*& avl) {
     cout << "Ingrese nueva fecha y hora (actual: " << transaAModificar->transa->getFechaHora() << "): ";
     cin >> nuevaFechaHora;
 
+    string nuevoLugar;
+    cout << "Ingrese nueva Ubicacion(Ciudad/Pais) (actual: " << transaAModificar->transa->getLugar() << "): ";
+    cin >> nuevoLugar;
+
     transaAModificar->transa->setCuentaOrigen(nuevaCuentaOrigen);
     transaAModificar->transa->setCuentaDestino(nuevaCuentaDestino);
     transaAModificar->transa->setMonto(nuevoMonto);
     transaAModificar->transa->setFechaHora(nuevaFechaHora);
+    transaAModificar->transa->setLugar(nuevoLugar);
 
     cout << "Transaccion con ID " << idTransaccion << " modificada exitosamente." << endl;
 }
@@ -215,7 +220,11 @@ void agregarNuevaTransa(arbolAVL*& avl) {
     cout << "Ingrese fecha y hora(DD/MM/AAAA-HH:mm): ";
     cin >> fecha_hora;
 
-    transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora);
+    string lugar;
+    cout << "Ingrese Ubicacion(Ciudad/Pais): ";
+    cin >> lugar;
+
+    transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora, lugar);
     avl->insertar(nuevaTransa);
     guardarTransaccionEnArchivo("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
 
@@ -228,7 +237,7 @@ void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo
         return;
     }
 
-    string linea, id, cuentaOrigen, cuentaDestino, fechaHora;
+    string linea, id, cuentaOrigen, cuentaDestino, fechaHora,lugar;
     double monto;
     while (getline(archivo, linea)) {
         stringstream ss(linea);
@@ -237,9 +246,9 @@ void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo
         getline(ss, cuentaDestino, ',');
         ss >> monto;
         ss.ignore(1, ',');
-        getline(ss, fechaHora);
-
-        transaccion* transa = new transaccion(id, cuentaOrigen, cuentaDestino, monto, fechaHora);
+        getline(ss, fechaHora, ',');
+        getline(ss,lugar);
+        transaccion* transa = new transaccion(id, cuentaOrigen, cuentaDestino, monto, fechaHora,lugar);
         avl->insertar(transa);
     }
 
@@ -257,7 +266,8 @@ void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nueva
             << nuevaTransa->getCuentaOrigen() << ','
             << nuevaTransa->getCuentaDestino() << ','
             << nuevaTransa->getMonto() << ','
-            << nuevaTransa->getFechaHora();
+            << nuevaTransa->getFechaHora() << ','
+            << nuevaTransa->getLugar();
 
     archivo.close();
 }

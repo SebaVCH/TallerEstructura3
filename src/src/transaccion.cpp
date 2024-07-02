@@ -5,12 +5,13 @@
 #include "../include/transaccion.h"
 
 // Constructor
-transaccion::transaccion(string id, string origen, string destino, double monto, string fechaHora) {
+transaccion::transaccion(string id, string origen, string destino, double monto, string fechaHora, string lugar) {
     ID = id;
     cuenta_origen = origen;
     cuenta_destino = destino;
     this->monto = monto;
     fecha_hora = fechaHora;
+    Lugar=lugar;
 }
 
 string transaccion::getID() {
@@ -33,6 +34,10 @@ string transaccion::getFechaHora() {
     return fecha_hora;
 }
 
+string transaccion::getLugar() {
+    return Lugar;
+}
+
 void transaccion::setCuentaOrigen(string cuentaOrigen) {
     cuenta_origen = cuentaOrigen;
 }
@@ -47,4 +52,8 @@ void transaccion::setMonto(double monto) {
 
 void transaccion::setFechaHora(string fechaHora) {
     fecha_hora = fechaHora;
+}
+
+void transaccion::setLugar(string lugar) {
+    Lugar = lugar;
 }
