@@ -22,6 +22,9 @@ void eliminarTransa(arbolAVL*& avl);
 void modificarTransa(arbolAVL*& avl);
 void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo);
 void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nuevaTransa);
+void definirMontoSospechoso(int &maximoOriginal);
+void definirLapsoDeTiempoYFrecuencia(int &difEntreTran, int &cantMax);
+void definirMaximoDeHoras(int &horasMinimas);
 
 int main() {
     arbolAVL* arbolTransacciones = new arbolAVL();
@@ -33,6 +36,14 @@ int main() {
 }
 
 void mostrarMenu(arbolAVL* &avl) {
+
+    int montoMaximo = 10000;
+
+    int diferenciaEntreTransacciones = 60; //En minutos
+    int cantMaxDeTransferencias = 5;
+
+    int diferenciaMaximaDeHoras = 12; //Tiempo de espera en horas, entre diferentes zonas geograficas
+
     int opcion;
 
     do {
@@ -78,6 +89,29 @@ void mostrarMenu(arbolAVL* &avl) {
             case 4:
                 break;
             case 5:
+                cout << "Indique que el numero del criterio que desea modificar:" << endl;
+                cout << "1. Monto maximo a transferir" << endl;
+                cout << "2. Lapso de tiempo entre transacciones" << endl;
+                cout << "3. Salir" << endl;
+                cin >> opcion;
+
+                switch (opcion) {
+                    case 1:
+                        definirMontoSospechoso(montoMaximo);
+                        break;
+                    case 2:
+                        definirLapsoDeTiempoYFrecuencia(diferenciaEntreTransacciones,cantMaxDeTransferencias);
+                        break;
+                    case 3:
+                        definirMaximoDeHoras(diferenciaMaximaDeHoras);
+                        break;
+                    case 4:
+                        cout << "Regresando al menu del banco..." << endl;
+                        break;
+                    default:
+                        cout << "Opcion no valida. Por favor, ingrese un numero valido." << endl;
+                        break;
+                }
                 break;
             case 6:
                 cout << "Saliendo del programa..." << endl;
@@ -88,11 +122,6 @@ void mostrarMenu(arbolAVL* &avl) {
         }
     } while (opcion != 6);
 }
-
-
-
-
-
 
 void eliminarTransa(arbolAVL*& avl) {
     string ID;
@@ -140,7 +169,6 @@ void modificarTransa(arbolAVL*& avl) {
 
     cout << "Transaccion con ID " << idTransaccion << " modificada exitosamente." << endl;
 }
-
 void buscarTransa(arbolAVL*& avl) {
     string ID;
     cout << "Indique el ID de la transaccion a buscar: ";
@@ -152,18 +180,24 @@ void buscarTransa(arbolAVL*& avl) {
         cout << "La transaccion no existe. Por favor digite correctamente el ID de la transaccion o agreguela manualmente." << endl;
     }
 }
-
 void agregarNuevaTransa(arbolAVL*& avl) {
-    // Generar ID automáticamente
+
+    //Generar ID nuevo respecto al ultimo
     ifstream archivo("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
     string linea;
-    int id = 0;
+    int maxID = 0;
     while (getline(archivo, linea)) {
-        id++;
+        if (linea.length() > 3 && linea[0] >= '0' && linea[0] <= '9') {
+            int id = stoi(linea.substr(0, 3));
+            maxID = max(maxID, id);
+        }
     }
     archivo.close();
 
-    string ID = to_string(id + 1);
+    string nuevoID = to_string(maxID + 1);
+    while (nuevoID.length() < 3) {
+        nuevoID = "0" + nuevoID;
+    }
 
     string cuenta_origen;
     cout << "Ingrese numero de cuenta de origen: ";
@@ -181,13 +215,12 @@ void agregarNuevaTransa(arbolAVL*& avl) {
     cout << "Ingrese fecha y hora: ";
     cin >> fecha_hora;
 
-    transaccion* nuevaTransa = new transaccion(ID, cuenta_origen, cuenta_destino, monto, fecha_hora);
+    transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora);
     avl->insertar(nuevaTransa);
     guardarTransaccionEnArchivo("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
 
-    cout << "Transaccion agregada exitosamente con ID: " << ID << endl;
+    cout << "Transaccion agregada exitosamente con ID: " << nuevoID << endl;
 }
-
 void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -212,7 +245,6 @@ void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo
 
     archivo.close();
 }
-
 void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nuevaTransa) {
     ofstream archivo(nombreArchivo, ios::app);
     if (!archivo.is_open()) {
@@ -228,4 +260,22 @@ void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nueva
             << nuevaTransa->getFechaHora();
 
     archivo.close();
+}
+void definirMontoSospechoso(int &maximoOriginal) {
+    cout << "Indique el monto para definir que una transaccion es sospechosa: ";
+    cin >> maximoOriginal;
+}
+void definirLapsoDeTiempoYFrecuencia(int &difEntreTran, int &cantMax) {
+
+    cout << "Indique la cantidad maxima de transacciones: ";
+    cin >> cantMax;
+    cout << "Indique el periodo de tiempo en el que puedan ocurrir como maximo " << cantMax << " transacciones: ";
+    cin >> difEntreTran;
+
+}
+void definirMaximoDeHoras(int &horasMinimas) {
+
+    cout << "Indique el minimo de horas que debe haber para realizar una transaccion en diferentes ubicaciones geograficas: ";
+    cin >> horasMinimas;
+
 }
