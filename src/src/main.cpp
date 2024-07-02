@@ -212,7 +212,7 @@ void agregarNuevaTransa(arbolAVL*& avl) {
     cin >> monto;
 
     string fecha_hora;
-    cout << "Ingrese fecha y hora: ";
+    cout << "Ingrese fecha y hora(DD/MM/AAAA-HH:mm): ";
     cin >> fecha_hora;
 
     transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora);
