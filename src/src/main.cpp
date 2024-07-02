@@ -25,6 +25,7 @@ void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nueva
 void definirMontoSospechoso(int &maximoOriginal);
 void definirLapsoDeTiempoYFrecuencia(int &difEntreTran, int &cantMax);
 void definirMaximoDeHoras(int &horasMinimas);
+void modificarTXT(string ID);
 
 int main() {
     arbolAVL* arbolTransacciones = new arbolAVL();
@@ -69,6 +70,7 @@ void mostrarMenu(arbolAVL* &avl) {
                 cout << "1. Modificar parametros de una transaccion" << endl;
                 cout << "2. Eliminar una transaccion" << endl;
                 cout << "3. Salir" << endl;
+                cout << "Ingrese su opcion: ";
                 cin >> opcion;
 
                 switch (opcion) {
@@ -130,6 +132,7 @@ void eliminarTransa(arbolAVL*& avl) {
 
     if (avl->eliminar(ID)) {
         cout << "Se ha borrado la transaccion con exito." << endl;
+        modificarTXT(ID);
     } else {
         cout << "No se ha borrado nada dado que la transaccion no existe." << endl;
     }
@@ -147,11 +150,11 @@ void modificarTransa(arbolAVL*& avl) {
     }
 
     string nuevaCuentaOrigen;
-    cout << "Ingrese nuevo numero de cuenta de origen (actual: " << transaAModificar->transa->getCuentaOrigen() << "): ";
+    cout << "Ingrese nuevo Nombre de cuenta de origen (actual: " << transaAModificar->transa->getCuentaOrigen() << "): ";
     cin >> nuevaCuentaOrigen;
 
     string nuevaCuentaDestino;
-    cout << "Ingrese nuevo numero de cuenta de destino (actual: " << transaAModificar->transa->getCuentaDestino() << "): ";
+    cout << "Ingrese nuevo Nombre de cuenta de destino (actual: " << transaAModificar->transa->getCuentaDestino() << "): ";
     cin >> nuevaCuentaDestino;
 
     double nuevoMonto;
@@ -171,9 +174,38 @@ void modificarTransa(arbolAVL*& avl) {
     transaAModificar->transa->setMonto(nuevoMonto);
     transaAModificar->transa->setFechaHora(nuevaFechaHora);
     transaAModificar->transa->setLugar(nuevoLugar);
-
     cout << "Transaccion con ID " << idTransaccion << " modificada exitosamente." << endl;
+    //modificar el txt
+    //Buscar anteriro
+    //Borrar el anterior
+    //poner nuevo
+
+
+
+
 }
+void modificarTXT(string ID){
+     // Modificar el txt
+        string arch= "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt";
+        string temporal="D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt";
+        ifstream archivoOriginal(arch);
+        ofstream archivoTemporal(temporal);
+
+        string linea;
+        while (getline(archivoOriginal, linea)) {
+            if (linea.substr(0, 3) != ID) {
+                archivoTemporal << linea << endl;
+            }
+        }
+
+        archivoOriginal.close();
+        archivoTemporal.close();
+
+        // Borrar el archivo original y renombrar el temporal
+        remove("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+        rename("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt", "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+}
+
 void buscarTransa(arbolAVL*& avl) {
     string ID;
     cout << "Indique el ID de la transaccion a buscar: ";
