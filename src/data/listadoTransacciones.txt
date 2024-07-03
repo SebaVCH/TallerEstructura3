@@ -10,3 +10,10 @@
 010,Ricardo,Daniela,800,08/06/2024-22:10,Quito/Ecuador
 011,Farfenchos,Farfenchas,100000,02/07/2024-13:59,Mexico City/Mexico
 012,Pablito,Clavito,10000,03/07/2024-14:50,Iquique/Chile
+013,Farfenchos,Farfenchas,1000,02/07/2024-13:59,Mexico City/Mexico
+014,Farfenchos,Farfenchas,1000,02/07/2024-14:00,Mexico City/Mexico
+015,Farfenchos,Farfenchas,1000,02/07/2024-14:30,Mexico City/Mexico
+016,Farfenchos,Farfenchas,1000,02/07/2024-14:31,Mexico City/Mexico
+017,Farfenchos,Farfenchas,1000,02/07/2024-14:32,Mexico City/Mexico
+018,Farfenchos,Farfenchas,1000,02/07/2024-14:33,Mexico City/Mexico
+019,Farfenchos,Farfenchas,1000,02/07/2024-14:34,Iquique/Chile

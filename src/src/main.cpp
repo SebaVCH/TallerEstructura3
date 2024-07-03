@@ -102,7 +102,7 @@ void mostrarMenu(arbolAVL* &avl) {
                 cout << "Indique que el numero del criterio que desea modificar:" << endl;
                 cout << "1. Monto maximo a transferir" << endl;
                 cout << "2. Lapso de tiempo entre transacciones" << endl;
-                cout << "3. Lapso de tiempo entre transacciones" << endl;
+                cout << "3. Definir Maximo De Horas de espera entre zonas geograficas" << endl;
                 cout << "4. Salir" << endl;
                 cout << "Ingrese su opcion: ";
                 cin >> opcion;
