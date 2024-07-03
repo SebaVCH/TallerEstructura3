@@ -28,7 +28,8 @@ void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int m
 //Cargado y guardado de archivos
 void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo);
 void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nuevaTransa);
-void modificarTXT(string ID);
+void eliminarLineaTXT(string ID);
+void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion, const string& nuevaLinea);
 
 
 int main() {
@@ -101,7 +102,9 @@ void mostrarMenu(arbolAVL* &avl) {
                 cout << "Indique que el numero del criterio que desea modificar:" << endl;
                 cout << "1. Monto maximo a transferir" << endl;
                 cout << "2. Lapso de tiempo entre transacciones" << endl;
-                cout << "3. Salir" << endl;
+                cout << "3. Lapso de tiempo entre transacciones" << endl;
+                cout << "4. Salir" << endl;
+                cout << "Ingrese su opcion: ";
                 cin >> opcion;
 
                 switch (opcion) {
@@ -168,7 +171,7 @@ void eliminarTransa(arbolAVL*& avl) {
 
     if (avl->eliminar(ID)) {
         cout << "Se ha borrado la transaccion con exito." << endl;
-        modificarTXT(ID);
+        eliminarLineaTXT(ID);
     } else {
         cout << "No se ha borrado nada dado que la transaccion no existe." << endl;
     }
@@ -215,31 +218,71 @@ void modificarTransa(arbolAVL*& avl) {
     //Buscar anteriro
     //Borrar el anterior
     //poner nuevo
+    string nuevaLinea = idTransaccion + "," + nuevaCuentaOrigen + "," + nuevaCuentaDestino + "," + to_string(nuevoMonto) + "," + nuevaFechaHora + "," + nuevoLugar;
+    modificarLineaTXT("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt", idTransaccion, nuevaLinea);
 
 
 
 
 }
-void modificarTXT(string ID){
-     // Modificar el txt
-        string arch= "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt";
-        string temporal="D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt";
-        ifstream archivoOriginal(arch);
-        ofstream archivoTemporal(temporal);
+void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion, const string& nuevaLinea) {
+    ifstream archivoOriginal(nombreArchivo);
+    ofstream archivoTemporal(nombreArchivo + ".temp");
 
-        string linea;
-        while (getline(archivoOriginal, linea)) {
-            if (linea.substr(0, 3) != ID) {
-                archivoTemporal << linea << endl;
+    string linea;
+    bool esPrimeraLinea = true;
+
+    while (getline(archivoOriginal, linea)) {
+        if (linea.substr(0, 3) == idTransaccion) {
+            if (!nuevaLinea.empty()) {
+                if (!esPrimeraLinea) {
+                    archivoTemporal << endl;
+                }
+                archivoTemporal << nuevaLinea;
+                esPrimeraLinea = false;
             }
+        } else {
+            if (!esPrimeraLinea) {
+                archivoTemporal << endl;
+            }
+            archivoTemporal << linea;
+            esPrimeraLinea = false;
         }
+    }
 
-        archivoOriginal.close();
-        archivoTemporal.close();
+    archivoOriginal.close();
+    archivoTemporal.close();
 
-        // Borrar el archivo original y renombrar el temporal
-        remove("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
-        rename("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt", "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+    remove(nombreArchivo.c_str());
+    rename((nombreArchivo + ".temp").c_str(), nombreArchivo.c_str());
+}
+
+
+void eliminarLineaTXT(string ID){
+    // Modificar el txt
+    string arch = "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt";
+    string temporal = "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt";
+    ifstream archivoOriginal(arch);
+    ofstream archivoTemporal(temporal);
+
+    string linea;
+    bool esPrimeraLinea = true;
+    while (getline(archivoOriginal, linea)) {
+        if (linea.substr(0, 3) != ID) {
+            if (!esPrimeraLinea) {
+                archivoTemporal << endl;
+            }
+            archivoTemporal << linea;
+            esPrimeraLinea = false;
+        }
+    }
+
+    archivoOriginal.close();
+    archivoTemporal.close();
+
+    // Borrar el archivo original y renombrar el temporal
+    remove("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+    rename("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt", "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
 }
 
 void buscarTransa(arbolAVL*& avl) {
@@ -298,6 +341,7 @@ void agregarNuevaTransa(arbolAVL*& avl) {
 
     cout << "Transaccion agregada exitosamente con ID: " << nuevoID << endl;
 }
+
 void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -323,21 +367,27 @@ void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo
     archivo.close();
 }
 void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nuevaTransa) {
-    ofstream archivo(nombreArchivo, ios::app);
-    if (!archivo.is_open()) {
+    ifstream archivo(nombreArchivo);
+    bool archivoVacio = archivo.peek() == ifstream::traits_type::eof();
+    archivo.close();
+
+    ofstream archivoOut(nombreArchivo, ios::app);
+    if (!archivoOut.is_open()) {
         cerr << "Error al abrir el archivo de transacciones." << endl;
         return;
     }
 
-    archivo << endl
-            << nuevaTransa->getID() << ','
-            << nuevaTransa->getCuentaOrigen() << ','
-            << nuevaTransa->getCuentaDestino() << ','
-            << nuevaTransa->getMonto() << ','
-            << nuevaTransa->getFechaHora() << ','
-            << nuevaTransa->getLugar();
+    if (!archivoVacio) {
+        archivoOut << endl;
+    }
+    archivoOut << nuevaTransa->getID() << ','
+               << nuevaTransa->getCuentaOrigen() << ','
+               << nuevaTransa->getCuentaDestino() << ','
+               << nuevaTransa->getMonto() << ','
+               << nuevaTransa->getFechaHora() << ','
+               << nuevaTransa->getLugar();
 
-    archivo.close();
+    archivoOut.close();
 }
 void definirMontoSospechoso(int &maximoOriginal) {
     cout << "Indique el monto para definir que una transaccion es sospechosa: ";
