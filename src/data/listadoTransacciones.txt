@@ -17,3 +17,4 @@
 017,Farfenchos,Farfenchas,1000,02/07/2024-14:32,Mexico City/Mexico
 018,Farfenchos,Farfenchas,1000,02/07/2024-14:33,Mexico City/Mexico
 019,Farfenchos,Farfenchas,1000,02/07/2024-14:34,Iquique/Chile
+020,Pablo,Carla,1000,03/07/2024-16:47,Chiloe/Chile
