@@ -19,7 +19,7 @@ private:
     string Lugar;
 
     int stringToInt(const string& str) const;
-    void separarFechaHora(const string& fechaHora, int& dia, int& mes, int& año, int& hora, int& minutos) const ;
+    void separarFechaHora(const string& fechaHora, int& dia, int& mes, int& anno, int& hora, int& minutos) const ;
 
 public:
     transaccion(string id, string origen, string destino, double monto, string fechaHora, string lugar);
