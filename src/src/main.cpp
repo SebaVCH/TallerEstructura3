@@ -35,7 +35,7 @@ void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion,
 
 int main() {
     arbolAVL* arbolTransacciones = new arbolAVL();
-    cargarTransaccionesDesdeArchivo(arbolTransacciones, "workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
+    cargarTransaccionesDesdeArchivo(arbolTransacciones, "/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
     mostrarMenu(arbolTransacciones);
 
     delete arbolTransacciones;
@@ -220,7 +220,7 @@ void modificarTransa(arbolAVL*& avl) {
     //Borrar el anterior
     //poner nuevo
     string nuevaLinea = idTransaccion + "," + nuevaCuentaOrigen + "," + nuevaCuentaDestino + "," + to_string(nuevoMonto) + "," + nuevaFechaHora + "," + nuevoLugar;
-    modificarLineaTXT("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", idTransaccion, nuevaLinea);
+    modificarLineaTXT("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", idTransaccion, nuevaLinea);
 
 
 
@@ -261,8 +261,8 @@ void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion,
 
 void eliminarLineaTXT(string ID){
     // Modificar el txt
-    string arch = "workspaces/TallerEstructura3/src/data/listadoTransacciones.txt";
-    string temporal = "workspaces/TallerEstructura3/src/data/tempListadoTransacciones.txt";
+    string arch = "/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt";
+    string temporal = "/workspaces/TallerEstructura3/src/data/tempListadoTransacciones.txt";
     ifstream archivoOriginal(arch);
     ofstream archivoTemporal(temporal);
 
@@ -282,8 +282,8 @@ void eliminarLineaTXT(string ID){
     archivoTemporal.close();
 
     // Borrar el archivo original y renombrar el temporal
-    remove("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
-    rename("workspaces/TallerEstructura3/src/data/tempListadoTransacciones.txt", "workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
+    remove("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
+    rename("/workspaces/TallerEstructura3/src/data/tempListadoTransacciones.txt", "/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
 }
 
 void buscarTransa(arbolAVL*& avl) {
@@ -300,7 +300,7 @@ void buscarTransa(arbolAVL*& avl) {
 void agregarNuevaTransa(arbolAVL*& avl) {
 
     //Generar ID nuevo respecto al ultimo
-    ifstream archivo("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
+    ifstream archivo("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
     string linea;
     int maxID = 0;
     while (getline(archivo, linea)) {
@@ -338,7 +338,7 @@ void agregarNuevaTransa(arbolAVL*& avl) {
 
     transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora, lugar);
     avl->insertar(nuevaTransa);
-    guardarTransaccionEnArchivo("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
+    guardarTransaccionEnArchivo("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
 
     cout << "Transaccion agregada exitosamente con ID: " << nuevoID << endl;
 }
