@@ -9,7 +9,7 @@ using namespace std;
 //g++ src/src/*.cpp -o taller
 //./taller
 
-//3 lugares donde se pide la ruta del txt
+//8 lugares donde se pide la ruta del txt
 //"D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt"
 
 // Menu
