@@ -66,23 +66,23 @@ int transaccion::stringToInt(const string& str) const {
     return num;
 }
 
-void transaccion::separarFechaHora(const string& fechaHora, int& dia, int& mes, int& año, int& hora, int& minutos) const {
+void transaccion::separarFechaHora(const string& fechaHora, int& dia, int& mes, int& anno, int& hora, int& minutos) const {
     dia = stringToInt(fechaHora.substr(0, 2));
     mes = stringToInt(fechaHora.substr(3, 2));
-    año = stringToInt(fechaHora.substr(6, 4));
+    anno = stringToInt(fechaHora.substr(6, 4));
     hora = stringToInt(fechaHora.substr(11, 2));
     minutos = stringToInt(fechaHora.substr(14, 2));
 }
 
 int transaccion::calcularDiferenciaMinutos(transaccion* otraTransaccion) const {
-    int dia1, mes1, año1, hora1, minutos1;
-    int dia2, mes2, año2, hora2, minutos2;
+    int dia1, mes1, anno1, hora1, minutos1;
+    int dia2, mes2, anno2, hora2, minutos2;
 
-    separarFechaHora(fecha_hora, dia1, mes1, año1, hora1, minutos1);
-    separarFechaHora(otraTransaccion->getFechaHora(), dia2, mes2, año2, hora2, minutos2);
+    separarFechaHora(fecha_hora, dia1, mes1, anno1, hora1, minutos1);
+    separarFechaHora(otraTransaccion->getFechaHora(), dia2, mes2, anno2, hora2, minutos2);
 
-    int totalMinutos1 = ((año1 * 365 + mes1 * 30 + dia1) * 24 + hora1) * 60 + minutos1;
-    int totalMinutos2 = ((año2 * 365 + mes2 * 30 + dia2) * 24 + hora2) * 60 + minutos2;
+    int totalMinutos1 = ((anno1 * 365 + mes1 * 30 + dia1) * 24 + hora1) * 60 + minutos1;
+    int totalMinutos2 = ((anno2 * 365 + mes2 * 30 + dia2) * 24 + hora2) * 60 + minutos2;
 
     return abs(totalMinutos2 - totalMinutos1);
 }

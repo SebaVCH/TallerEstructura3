@@ -9,8 +9,9 @@ using namespace std;
 //g++ src/src/*.cpp -o taller
 //./taller
 
-//8 lugares donde se pide la ruta del txt
+//9 lugares donde se pide la ruta del txt
 //"D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt"
+///"workspaces/TallerEstructura2/src/data/listadoTransacciones.txt"
 
 // Menu
 void mostrarMenu(arbolAVL*& avl);
@@ -34,7 +35,7 @@ void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion,
 
 int main() {
     arbolAVL* arbolTransacciones = new arbolAVL();
-    cargarTransaccionesDesdeArchivo(arbolTransacciones, "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+    cargarTransaccionesDesdeArchivo(arbolTransacciones, "workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
     mostrarMenu(arbolTransacciones);
 
     delete arbolTransacciones;
@@ -219,7 +220,7 @@ void modificarTransa(arbolAVL*& avl) {
     //Borrar el anterior
     //poner nuevo
     string nuevaLinea = idTransaccion + "," + nuevaCuentaOrigen + "," + nuevaCuentaDestino + "," + to_string(nuevoMonto) + "," + nuevaFechaHora + "," + nuevoLugar;
-    modificarLineaTXT("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt", idTransaccion, nuevaLinea);
+    modificarLineaTXT("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", idTransaccion, nuevaLinea);
 
 
 
@@ -260,8 +261,8 @@ void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion,
 
 void eliminarLineaTXT(string ID){
     // Modificar el txt
-    string arch = "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt";
-    string temporal = "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt";
+    string arch = "workspaces/TallerEstructura3/src/data/listadoTransacciones.txt";
+    string temporal = "workspaces/TallerEstructura3/src/data/tempListadoTransacciones.txt";
     ifstream archivoOriginal(arch);
     ofstream archivoTemporal(temporal);
 
@@ -281,8 +282,8 @@ void eliminarLineaTXT(string ID){
     archivoTemporal.close();
 
     // Borrar el archivo original y renombrar el temporal
-    remove("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
-    rename("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/tempListadoTransacciones.txt", "D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+    remove("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
+    rename("workspaces/TallerEstructura3/src/data/tempListadoTransacciones.txt", "workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
 }
 
 void buscarTransa(arbolAVL*& avl) {
@@ -299,7 +300,7 @@ void buscarTransa(arbolAVL*& avl) {
 void agregarNuevaTransa(arbolAVL*& avl) {
 
     //Generar ID nuevo respecto al ultimo
-    ifstream archivo("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt");
+    ifstream archivo("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
     string linea;
     int maxID = 0;
     while (getline(archivo, linea)) {
@@ -337,7 +338,7 @@ void agregarNuevaTransa(arbolAVL*& avl) {
 
     transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora, lugar);
     avl->insertar(nuevaTransa);
-    guardarTransaccionEnArchivo("D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
+    guardarTransaccionEnArchivo("workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
 
     cout << "Transaccion agregada exitosamente con ID: " << nuevoID << endl;
 }
