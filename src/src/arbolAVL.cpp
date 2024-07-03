@@ -182,10 +182,116 @@ Nodo *arbolAVL::obtenerRaiz() {
     return raiz;
 }
 
+void arbolAVL::obtenerSospechososMontoMaximo(Nodo *nodo, arbolAVL *&Sospechoso, int montoMaximo) {
+
+    if (nodo == nullptr) {
+        return;
+    }
+
+    obtenerSospechososMontoMaximo(nodo->izquierdo, Sospechoso,montoMaximo);
+
+    if (nodo->transa->getMonto() > montoMaximo) {
+        Sospechoso->insertar(nodo->transa);
+    }
+
+    obtenerSospechososMontoMaximo(nodo->derecho, Sospechoso,montoMaximo);
+
+}
+
+void arbolAVL::printTransaccionesSospechosas(Nodo *nodo) {
+
+    if (nodo == nullptr) {
+        return;
+    }
+
+    printTransaccionesSospechosas(nodo->izquierdo);
+
+    cout << "ID: " << nodo->transa->getID() << endl;
+    cout << "Cuenta de origen: " << nodo->transa->getCuentaOrigen() << endl;
+    cout << "Cuenta de destino: " << nodo->transa->getCuentaDestino() << endl;
+    cout << "Monto: " << nodo->transa->getMonto() << endl;
+    cout << "Fecha y hora: " << nodo->transa->getFechaHora() << endl;
+    cout << "Ubicacion: " << nodo->transa->getLugar() << endl;
+    cout << "-----------------------------" << endl;
+
+    printTransaccionesSospechosas(nodo->derecho);
+
+}
+
+void arbolAVL::encontrarTransaccionesFrecuentes(Nodo* nodo, queue<transaccion*>& transaccionesRecientes, int diferenciaEntreTransacciones, int cantMaxDeTransferencias, arbolAVL*& Sospechoso) {
+    if (nodo == nullptr) {
+        return;
+    }
+
+    encontrarTransaccionesFrecuentes(nodo->izquierdo, transaccionesRecientes, diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
+
+    transaccionesRecientes.push(nodo->transa);
+
+    while (!transaccionesRecientes.empty() && transaccionesRecientes.front()->calcularDiferenciaMinutos(nodo->transa) > diferenciaEntreTransacciones) {
+        transaccionesRecientes.pop();
+    }
+
+    int count = 0;
+    queue<transaccion*> transaccionesTemp = transaccionesRecientes;
+    while (!transaccionesTemp.empty()) {
+        if (transaccionesTemp.front()->getCuentaOrigen() == nodo->transa->getCuentaOrigen()) {
+            count++;
+        }
+        transaccionesTemp.pop();
+    }
+
+    if (count > cantMaxDeTransferencias) {
+        Sospechoso->insertar(nodo->transa);
+    }
+
+    encontrarTransaccionesFrecuentes(nodo->derecho, transaccionesRecientes, diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
+}
 
 
+void arbolAVL::obtenerSospechososFrecuencia(int diferenciaEntreTransacciones, int cantMaxDeTransferencias,arbolAVL *&Sospechoso) {
 
+    queue<transaccion*> transaccionesRecientes;
+    encontrarTransaccionesFrecuentes(raiz, transaccionesRecientes, diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
 
+}
 
+void arbolAVL::obtenerSospechososPorUbicacion(int diferenciaMaximaDeHoras, arbolAVL* &Sospechoso) {
+    queue<transaccion*> transaccionesRecientes;
+    encontrarTransaccionesPorUbicacion(raiz, transaccionesRecientes, diferenciaMaximaDeHoras, Sospechoso);
+}
 
+void arbolAVL::encontrarTransaccionesPorUbicacion(Nodo* nodo, queue<transaccion*>& transaccionesRecientes, int diferenciaMaximaDeHoras, arbolAVL*& Sospechoso) {
+    if (nodo == nullptr) {
+        return;
+    }
+
+    encontrarTransaccionesPorUbicacion(nodo->izquierdo, transaccionesRecientes, diferenciaMaximaDeHoras, Sospechoso);
+
+    transaccionesRecientes.push(nodo->transa);
+
+    while (!transaccionesRecientes.empty() && transaccionesRecientes.front()->calcularDiferenciaMinutos(nodo->transa) / 60 > diferenciaMaximaDeHoras) {
+        transaccionesRecientes.pop();
+    }
+
+    string cuentaOrigenActual = nodo->transa->getCuentaOrigen();
+    string lugarActual = nodo->transa->getLugar();
+
+    queue<transaccion*> transaccionesTemp = transaccionesRecientes;
+    while (!transaccionesTemp.empty()) {
+        transaccion* transaTemp = transaccionesTemp.front();
+        transaccionesTemp.pop();
+
+        if (transaTemp->getCuentaOrigen() == cuentaOrigenActual) {
+            if (transaTemp->getLugar() != lugarActual) {
+                int diferenciaHoras = transaTemp->calcularDiferenciaMinutos(nodo->transa) / 60;
+                if (diferenciaHoras <= diferenciaMaximaDeHoras) {
+                    Sospechoso->insertar(nodo->transa);
+                    break;
+                }
+            }
+        }
+    }
+
+    encontrarTransaccionesPorUbicacion(nodo->derecho, transaccionesRecientes, diferenciaMaximaDeHoras, Sospechoso);
+}
 

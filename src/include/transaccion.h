@@ -17,6 +17,10 @@ private:
     double monto;
     string fecha_hora;
     string Lugar;
+
+    int stringToInt(const string& str) const;
+    void separarFechaHora(const string& fechaHora, int& dia, int& mes, int& año, int& hora, int& minutos) const ;
+
 public:
     transaccion(string id, string origen, string destino, double monto, string fechaHora, string lugar);
 
@@ -32,6 +36,8 @@ public:
     void setMonto(double monto);
     void setFechaHora(string fechaHora);
     void setLugar(string lugar);
+
+    int calcularDiferenciaMinutos(transaccion* otraTransaccion) const;
 };
 
 #endif //TALLERESTRUCTURA3_TRANSACCION_H

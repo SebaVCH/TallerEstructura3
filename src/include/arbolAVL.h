@@ -4,6 +4,8 @@
 
 #ifndef TALLERESTRUCTURA3_ARBOLAVL_H
 #define TALLERESTRUCTURA3_ARBOLAVL_H
+
+#include <queue>
 #include "Nodo.h"
 using namespace std;
 
@@ -29,6 +31,11 @@ private:
     Nodo* eliminarNodo(Nodo* raiz, string id, bool& eliminado);
     Nodo* buscarNodo(Nodo* raiz,string id);
 
+    //Encontrar transacciones sospechosas
+    void encontrarTransaccionesFrecuentes(Nodo* nodo, queue<transaccion*>& transaccionesRecientes, int diferenciaEntreTransacciones, int cantMaxDeTransferencias, arbolAVL* &Sospechoso);
+    void encontrarTransaccionesPorUbicacion(Nodo* nodo, queue<transaccion*>& transaccionesRecientes, int diferenciaMaximaDeHoras, arbolAVL* &Sospechoso);
+
+
 public:
 
     arbolAVL();
@@ -39,6 +46,15 @@ public:
     bool eliminar(string id);
     Nodo* buscar(string id);
     Nodo* obtenerRaiz();
+
+    //Obtencion de sospechosos
+    void obtenerSospechososMontoMaximo(Nodo *nodo, arbolAVL *&Sospechoso,int montoMaximo);
+    void obtenerSospechososFrecuencia(int diferenciaEntreTransacciones, int cantMaxDeTransferencias, arbolAVL* &Sospechoso);
+    void obtenerSospechososPorUbicacion(int diferenciaMaximaDeHoras, arbolAVL* &Sospechoso);
+
+    //Prints de sospechosos
+    void printTransaccionesSospechosas(Nodo* nodo);
+
 
 };
 

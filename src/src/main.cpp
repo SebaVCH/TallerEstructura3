@@ -12,11 +12,10 @@ using namespace std;
 //3 lugares donde se pide la ruta del txt
 //"D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt"
 
-
 // Menu
 void mostrarMenu(arbolAVL*& avl);
 
-// Funciones a utilizar
+// Funciones principales
 void agregarNuevaTransa(arbolAVL*& avl);
 void buscarTransa(arbolAVL*& avl);
 void eliminarTransa(arbolAVL*& avl);
@@ -24,16 +23,13 @@ void modificarTransa(arbolAVL*& avl);
 void definirMontoSospechoso(int &maximoOriginal);
 void definirLapsoDeTiempoYFrecuencia(int &difEntreTran, int &cantMax);
 void definirMaximoDeHoras(int &horasMinimas);
-void modificarTXT(string ID);
-int stringToInt(string& str);
-void separarFechaHora(string& fechaHora, int& dia, int& mes, int& año, int& hora, int& minutos);
-int calcularDiferenciaMinutos(string& fechaHora1,string& fechaHora2);
 void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int maximo, int transacciones, int transferencias, int horas);
-void obtenerSospechososMontoMaximo(Nodo *nodo, arbolAVL *&Sospechoso,int montoMaximo);
 
 //Cargado y guardado de archivos
 void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo);
 void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nuevaTransa);
+void modificarTXT(string ID);
+
 
 int main() {
     arbolAVL* arbolTransacciones = new arbolAVL();
@@ -138,26 +134,32 @@ void mostrarMenu(arbolAVL* &avl) {
 
 void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int montoMaximo, int diferenciaEntreTransacciones, int cantMaxDeTransferencias, int diferenciaMaximaDeHoras) {
 
-    obtenerSospechososMontoMaximo(Avl->obtenerRaiz(),Sospechoso, montoMaximo);
+    Avl->obtenerSospechososMontoMaximo(Avl->obtenerRaiz(),Sospechoso,montoMaximo);
+    cout << "=== Transacciones sospechosas por monto maximo excedido ===" << endl;
+    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
+    cout << endl;
+
+    // Reiniciar arbol sospechoso
+    delete Sospechoso;
+    Sospechoso = new arbolAVL();
+
+    Avl->obtenerSospechososFrecuencia(diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
+    cout << "=== Transacciones sospechosas por frecuencia ===" << endl;
+    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
+    cout << endl;
+
+    // Reiniciar arbol sospechoso
+    delete Sospechoso;
+    Sospechoso = new arbolAVL();
+
+    Avl->obtenerSospechososPorUbicacion(diferenciaMaximaDeHoras, Sospechoso);
+    cout << "=== Transacciones sospechosas por ubicacion ===" << endl;
+    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
+
+    //Borrar arbol sospechoso
+    delete Sospechoso;
 
 }
-
-void obtenerSospechososMontoMaximo(Nodo *nodo, arbolAVL *&Sospechoso,int montoMaximo){
-
-    if (nodo == nullptr) {
-        return;
-    }
-
-    obtenerSospechososMontoMaximo(nodo->izquierdo, Sospechoso,montoMaximo);
-
-    if (nodo->transa->getMonto() > montoMaximo) {
-        Sospechoso->insertar(nodo->transa);
-    }
-
-    obtenerSospechososMontoMaximo(nodo->derecho, Sospechoso,montoMaximo);
-
-}
-
 
 void eliminarTransa(arbolAVL*& avl) {
     string ID;
@@ -354,38 +356,4 @@ void definirMaximoDeHoras(int &horasMinimas) {
     cout << "Indique el minimo de horas que debe haber para realizar una transaccion en diferentes ubicaciones geograficas: ";
     cin >> horasMinimas;
 
-}
-
-int stringToInt(string& str) {
-    std::stringstream ss(str);
-    int num;
-    ss >> num;
-    return num;
-}
-void separarFechaHora(string& fechaHora, int& dia, int& mes, int& año, int& hora, int& minutos) {
-    string diaStr, mesStr, añoStr, horaStr, minutosStr;
-
-    diaStr = fechaHora.substr(0, 2);
-    mesStr = fechaHora.substr(3, 2);
-    añoStr = fechaHora.substr(6, 4);
-    horaStr = fechaHora.substr(11, 2);
-    minutosStr = fechaHora.substr(14, 2);
-
-    dia = stringToInt(diaStr);
-    mes = stringToInt(mesStr);
-    año = stringToInt(añoStr);
-    hora = stringToInt(horaStr);
-    minutos = stringToInt(minutosStr);
-}
-int calcularDiferenciaMinutos(string& fechaHora1,string& fechaHora2) {
-    int dia1, mes1, año1, hora1, minutos1;
-    int dia2, mes2, año2, hora2, minutos2;
-
-    separarFechaHora(fechaHora1, dia1, mes1, año1, hora1, minutos1);
-    separarFechaHora(fechaHora2, dia2, mes2, año2, hora2, minutos2);
-
-    int totalMinutos1 = ((año1 * 365 + mes1 * 30 + dia1) * 24 + hora1) * 60 + minutos1;
-    int totalMinutos2 = ((año2 * 365 + mes2 * 30 + dia2) * 24 + hora2) * 60 + minutos2;
-
-    return abs(totalMinutos2 - totalMinutos1);
 }
