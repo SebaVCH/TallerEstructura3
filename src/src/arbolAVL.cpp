@@ -16,14 +16,19 @@ int arbolAVL::obtenerBalance(Nodo *nodo) {
 }
 
 Nodo *arbolAVL::rotacionLL(Nodo *nodo) {
-    Nodo* nuevaRaiz = nodo->izquierdo;
-    nodo->izquierdo = nuevaRaiz->derecho;
-    nuevaRaiz->derecho = nodo;
+    try {
+        Nodo* nuevaRaiz = nodo->izquierdo;
+        nodo->izquierdo = nuevaRaiz->derecho;
+        nuevaRaiz->derecho = nodo;
 
-    nodo->altura = 1 + max(obtenerBalance(nodo->izquierdo), obtenerBalance(nodo->derecho));
-    nuevaRaiz->altura = 1 + max(obtenerBalance(nuevaRaiz->izquierdo), obtenerBalance(nuevaRaiz->derecho));
+        nodo->altura = 1 + max(obtenerAltura(nodo->izquierdo), obtenerAltura(nodo->derecho));
+        nuevaRaiz->altura = 1 + max(obtenerAltura(nuevaRaiz->izquierdo), obtenerAltura(nuevaRaiz->derecho));
 
-    return nuevaRaiz;
+        return nuevaRaiz;
+    } catch (const std::bad_alloc &e) {
+        std::cerr << "Error de asignación de memoria: " << e.what() << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
 }
 
@@ -87,7 +92,14 @@ Nodo *arbolAVL::encontrarMinimo(Nodo *nodo) {
 
 Nodo *arbolAVL::insertarNodo(Nodo *raiz, transaccion *transa) {
 
-    if (raiz == nullptr) return new Nodo(transa);
+    if (raiz == nullptr) {
+        try {
+            return new Nodo(transa);
+        } catch (const std::bad_alloc &e) {
+            std::cerr << "Error de asignación de memoria: " << e.what() << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
 
     if (transa->getID() < raiz->transa->getID()) {
         raiz->izquierdo = insertarNodo(raiz->izquierdo,transa);
