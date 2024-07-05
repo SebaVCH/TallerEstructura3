@@ -144,7 +144,6 @@ void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int m
     cout << endl;
 
     // Reiniciar arbol sospechoso
-    delete Sospechoso;
     Sospechoso = new arbolAVL();
 
     Avl->obtenerSospechososFrecuencia(diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
@@ -161,7 +160,7 @@ void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int m
     Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
 
     //Borrar arbol sospechoso
-    delete Sospechoso;
+    Sospechoso = new arbolAVL();
 
 }
 

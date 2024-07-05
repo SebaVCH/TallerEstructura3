@@ -1,0 +1,8 @@
+# ninja log v6
+15	517	7418426294285245	CMakeFiles/TallerEstructura3.dir/src/src/Nodo.cpp.obj	48e15ce5e3ccfa4c
+8	575	7418426294215242	CMakeFiles/TallerEstructura3.dir/src/src/transaccion.cpp.obj	d6a0d097412d26a5
+12	834	7418426294255232	CMakeFiles/TallerEstructura3.dir/src/src/arbolAVL.cpp.obj	88a93bc176cb9e00
+4	903	7418426294174258	CMakeFiles/TallerEstructura3.dir/src/src/main.cpp.obj	515f392d50c468e5
+903	1009	7418426303170103	TallerEstructura3.exe	1b8945b55405f3e0
+4	708	7418427360389719	CMakeFiles/TallerEstructura3.dir/src/src/main.cpp.obj	515f392d50c468e5
+708	809	7418427367426822	TallerEstructura3.exe	1b8945b55405f3e0
