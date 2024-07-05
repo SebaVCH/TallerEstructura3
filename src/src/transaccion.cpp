@@ -15,6 +15,7 @@ transaccion::transaccion(string id, string origen, string destino, double monto,
     Lugar=lugar;
 }
 
+//Getters
 string transaccion::getID() {
     return ID;
 }
@@ -39,6 +40,7 @@ string transaccion::getLugar() {
     return Lugar;
 }
 
+//Setters
 void transaccion::setCuentaOrigen(string cuentaOrigen) {
     cuenta_origen = cuentaOrigen;
 }
@@ -59,6 +61,8 @@ void transaccion::setLugar(string lugar) {
     Lugar = lugar;
 }
 
+
+//Metodo para transformar string a entero
 int transaccion::stringToInt(const string& str) const {
     stringstream ss(str);
     int num;
@@ -66,6 +70,7 @@ int transaccion::stringToInt(const string& str) const {
     return num;
 }
 
+//Metodo para separar datos de una transaccion y pasarlo de string a entero
 void transaccion::separarFechaHora(const string& fechaHora, int& dia, int& mes, int& anno, int& hora, int& minutos) const {
     dia = stringToInt(fechaHora.substr(0, 2));
     mes = stringToInt(fechaHora.substr(3, 2));
@@ -74,6 +79,7 @@ void transaccion::separarFechaHora(const string& fechaHora, int& dia, int& mes, 
     minutos = stringToInt(fechaHora.substr(14, 2));
 }
 
+//Metodo que calcula la diferencia en minutos entre la transaccion actual y una transaccion entregada
 int transaccion::calcularDiferenciaMinutos(transaccion* otraTransaccion) const {
     int dia1, mes1, anno1, hora1, minutos1;
     int dia2, mes2, anno2, hora2, minutos2;

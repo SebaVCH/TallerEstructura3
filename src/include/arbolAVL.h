@@ -13,6 +13,7 @@ class arbolAVL {
 
 private:
 
+    //Atributo
     Nodo* raiz;
 
     //Extras
@@ -38,6 +39,7 @@ private:
 
 public:
 
+    //Constructor y destructor
     arbolAVL();
     ~arbolAVL();
 
@@ -54,7 +56,6 @@ public:
 
     //Prints de sospechosos
     void printTransaccionesSospechosas(Nodo* nodo);
-
 
 };
 

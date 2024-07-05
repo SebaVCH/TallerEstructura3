@@ -11,7 +11,7 @@ using namespace std;
 
 //9 lugares donde se pide la ruta del txt
 //"D:/Programas/c++ workspace visual/taller3/TallerEstructura3/src/data/listadoTransacciones.txt"
-///"workspaces/TallerEstructura2/src/data/listadoTransacciones.txt"
+//"/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt"
 
 // Menu
 void mostrarMenu(arbolAVL*& avl);
@@ -32,29 +32,29 @@ void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nueva
 void eliminarLineaTXT(string ID);
 void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion, const string& nuevaLinea);
 
-
 int main() {
+
+    //Crear arbol de transacciones y cargarlo desde un archivo
     arbolAVL* arbolTransacciones = new arbolAVL();
     cargarTransaccionesDesdeArchivo(arbolTransacciones, "/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
-    mostrarMenu(arbolTransacciones);
 
+    mostrarMenu(arbolTransacciones);
+    //Liberar memoria al finalizar
     delete arbolTransacciones;
     return 0;
 }
 
 void mostrarMenu(arbolAVL* &avl) {
 
-    //Arbol de sospechas
+    // Crear árbol AVL para transacciones sospechosas y definir variables de sospecha
     arbolAVL* arbolSospechoso = new arbolAVL();
-
-    //Variables de sospecha
     int montoMaximo = 10000;
     int diferenciaEntreTransacciones = 60; //En minutos
     int cantMaxDeTransferencias = 5;
     int diferenciaMaximaDeHoras = 12; //Tiempo de espera en horas, entre diferentes zonas geograficas
 
+    //Opciones del menu
     int opcion;
-
     do {
         cout << "***** BANCO *****" << endl;
         cout << "1. Ingresar nueva transaccion" << endl;
@@ -74,6 +74,7 @@ void mostrarMenu(arbolAVL* &avl) {
                 buscarTransa(avl);
                 break;
             case 3:
+                //Opciones para modificar transacciones
                 cout << "Indique que el numero del tipo de modificacion que desea realizar:" << endl;
                 cout << "1. Modificar parametros de una transaccion" << endl;
                 cout << "2. Eliminar una transaccion" << endl;
@@ -100,6 +101,7 @@ void mostrarMenu(arbolAVL* &avl) {
                 reporteTransaccionesSospechosas(avl,arbolSospechoso,montoMaximo,diferenciaEntreTransacciones,cantMaxDeTransferencias,diferenciaMaximaDeHoras);
                 break;
             case 5:
+                //Opciones para modificar criterios de sospecha
                 cout << "Indique que el numero del criterio que desea modificar:" << endl;
                 cout << "1. Monto maximo a transferir" << endl;
                 cout << "2. Lapso de tiempo entre transacciones" << endl;
@@ -134,37 +136,74 @@ void mostrarMenu(arbolAVL* &avl) {
                 break;
         }
     } while (opcion != 6);
+
+    //Liberar memoria al finalizar
+    delete arbolSospechoso;
 }
 
-void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int montoMaximo, int diferenciaEntreTransacciones, int cantMaxDeTransferencias, int diferenciaMaximaDeHoras) {
+void agregarNuevaTransa(arbolAVL*& avl) {
 
-    Avl->obtenerSospechososMontoMaximo(Avl->obtenerRaiz(),Sospechoso,montoMaximo);
-    cout << "=== Transacciones sospechosas por monto maximo excedido ===" << endl;
-    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
-    cout << endl;
+    //Generar ID nuevo respecto al ultimo
+    ifstream archivo("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
+    string linea;
+    int maxID = 0;
+    while (getline(archivo, linea)) {
+        if (linea.length() > 3 && linea[0] >= '0' && linea[0] <= '9') {
+            int id = stoi(linea.substr(0, 3));
+            maxID = max(maxID, id);
+        }
+    }
+    archivo.close();
 
-    // Reiniciar arbol sospechoso
-    Sospechoso = new arbolAVL();
+    string nuevoID = to_string(maxID + 1);
+    while (nuevoID.length() < 3) {
+        nuevoID = "0" + nuevoID;
+    }
 
-    Avl->obtenerSospechososFrecuencia(diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
-    cout << "=== Transacciones sospechosas por frecuencia ===" << endl;
-    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
-    cout << endl;
+    //Solicitar datos
+    string cuenta_origen;
+    cout << "Ingrese numero de cuenta de origen: ";
+    cin >> cuenta_origen;
 
-    // Reiniciar arbol sospechoso
-    
-    Sospechoso = new arbolAVL();
+    string cuenta_destino;
+    cout << "Ingrese numero de cuenta de destino: ";
+    cin >> cuenta_destino;
 
-    Avl->obtenerSospechososPorUbicacion(diferenciaMaximaDeHoras, Sospechoso);
-    cout << "=== Transacciones sospechosas por ubicacion ===" << endl;
-    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
+    double monto;
+    cout << "Ingrese monto de la transaccion: ";
+    cin >> monto;
 
-    //Borrar arbol sospechoso
-    Sospechoso = new arbolAVL();
+    string fecha_hora;
+    cout << "Ingrese fecha y hora(DD/MM/AAAA-HH:mm): ";
+    cin >> fecha_hora;
 
+    string lugar;
+    cout << "Ingrese Ubicacion(Ciudad/Pais): ";
+    cin >> lugar;
+
+    //Crear transaccion a parti de los datos y guardarla
+    transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora, lugar);
+    avl->insertar(nuevaTransa);
+    guardarTransaccionEnArchivo("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
+
+    cout << "Transaccion agregada exitosamente con ID: " << nuevoID << endl;
 }
+void buscarTransa(arbolAVL*& avl) {
 
+    //Ingresar ID para buscar si la transaccion existe o no
+    string ID;
+    cout << "Indique el ID de la transaccion a buscar: ";
+    cin >> ID;
+
+    if (avl->buscar(ID)) {
+        cout << "La transaccion si existe y esta en nuestra base de datos." << endl;
+    } else {
+        cout << "La transaccion no existe. Por favor digite correctamente el ID de la transaccion o agreguela manualmente." << endl;
+    }
+}
 void eliminarTransa(arbolAVL*& avl) {
+
+    //Ingresar ID para borrar una transaccion
     string ID;
     cout << "Indique el ID de la transaccion a eliminar: ";
     cin >> ID;
@@ -177,17 +216,21 @@ void eliminarTransa(arbolAVL*& avl) {
     }
 }
 void modificarTransa(arbolAVL*& avl) {
+
+    //Solicitar ID para ver si se puede modificar una transaccion
     string idTransaccion;
     cout << "Ingrese ID de la transaccion a modificar: ";
     cin >> idTransaccion;
 
     Nodo* transaAModificar = avl->buscar(idTransaccion);
 
+    //Terminar la funcion si la transaccion no existe
     if (transaAModificar == nullptr) {
         cout << "Error: Transaccion con ID " << idTransaccion << " no encontrada." << endl;
         return;
     }
 
+    //Solicitar datos para modifcar la transaccion
     string nuevaCuentaOrigen;
     cout << "Ingrese nuevo Nombre de cuenta de origen (actual: " << transaAModificar->transa->getCuentaOrigen() << "): ";
     cin >> nuevaCuentaOrigen;
@@ -221,10 +264,58 @@ void modificarTransa(arbolAVL*& avl) {
     string nuevaLinea = idTransaccion + "," + nuevaCuentaOrigen + "," + nuevaCuentaDestino + "," + to_string(nuevoMonto) + "," + nuevaFechaHora + "," + nuevoLugar;
     modificarLineaTXT("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", idTransaccion, nuevaLinea);
 
+}
 
+void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int montoMaximo, int diferenciaEntreTransacciones, int cantMaxDeTransferencias, int diferenciaMaximaDeHoras) {
 
+    //Obtener transacciones sospechosas que superen un monto maximo
+    Avl->obtenerSospechososMontoMaximo(Avl->obtenerRaiz(),Sospechoso,montoMaximo);
+    cout << "=== Transacciones sospechosas por monto maximo excedido ===" << endl;
+    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
+    cout << endl;
+
+    // Reiniciar arbol sospechoso
+    Sospechoso = new arbolAVL();
+
+    //Obtener transacciones sospechosas realizadas frecuentemente en un corto periodo de tiempo
+    Avl->obtenerSospechososFrecuencia(diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
+    cout << "=== Transacciones sospechosas por frecuencia ===" << endl;
+    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
+    cout << endl;
+
+    // Reiniciar arbol sospechoso
+
+    Sospechoso = new arbolAVL();
+
+    //Obtener transacciones sospechosas realizadas en diferentes ubicaciones en un corto periodo de tiempo
+    Avl->obtenerSospechososPorUbicacion(diferenciaMaximaDeHoras, Sospechoso);
+    cout << "=== Transacciones sospechosas por ubicacion ===" << endl;
+    Sospechoso->printTransaccionesSospechosas(Sospechoso->obtenerRaiz());
+
+    //Borrar arbol sospechoso
+    Sospechoso = new arbolAVL();
 
 }
+
+void definirMontoSospechoso(int &maximoOriginal) {
+    cout << "Indique el monto para definir que una transaccion es sospechosa: ";
+    cin >> maximoOriginal;
+}
+void definirLapsoDeTiempoYFrecuencia(int &difEntreTran, int &cantMax) {
+
+    cout << "Indique la cantidad maxima de transacciones: ";
+    cin >> cantMax;
+    cout << "Indique el periodo de tiempo en el que puedan ocurrir como maximo " << cantMax << " transacciones: ";
+    cin >> difEntreTran;
+
+}
+void definirMaximoDeHoras(int &horasMinimas) {
+
+    cout << "Indique el minimo de horas que debe haber para realizar una transaccion en diferentes ubicaciones geograficas: ";
+    cin >> horasMinimas;
+
+}
+
 void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion, const string& nuevaLinea) {
     ifstream archivoOriginal(nombreArchivo);
     ofstream archivoTemporal(nombreArchivo + ".temp");
@@ -256,8 +347,6 @@ void modificarLineaTXT(const string& nombreArchivo, const string& idTransaccion,
     remove(nombreArchivo.c_str());
     rename((nombreArchivo + ".temp").c_str(), nombreArchivo.c_str());
 }
-
-
 void eliminarLineaTXT(string ID){
     // Modificar el txt
     string arch = "/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt";
@@ -284,64 +373,6 @@ void eliminarLineaTXT(string ID){
     remove("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
     rename("/workspaces/TallerEstructura3/src/data/tempListadoTransacciones.txt", "/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
 }
-
-void buscarTransa(arbolAVL*& avl) {
-    string ID;
-    cout << "Indique el ID de la transaccion a buscar: ";
-    cin >> ID;
-
-    if (avl->buscar(ID)) {
-        cout << "La transaccion si existe y esta en nuestra base de datos." << endl;
-    } else {
-        cout << "La transaccion no existe. Por favor digite correctamente el ID de la transaccion o agreguela manualmente." << endl;
-    }
-}
-void agregarNuevaTransa(arbolAVL*& avl) {
-
-    //Generar ID nuevo respecto al ultimo
-    ifstream archivo("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt");
-    string linea;
-    int maxID = 0;
-    while (getline(archivo, linea)) {
-        if (linea.length() > 3 && linea[0] >= '0' && linea[0] <= '9') {
-            int id = stoi(linea.substr(0, 3));
-            maxID = max(maxID, id);
-        }
-    }
-    archivo.close();
-
-    string nuevoID = to_string(maxID + 1);
-    while (nuevoID.length() < 3) {
-        nuevoID = "0" + nuevoID;
-    }
-
-    string cuenta_origen;
-    cout << "Ingrese numero de cuenta de origen: ";
-    cin >> cuenta_origen;
-
-    string cuenta_destino;
-    cout << "Ingrese numero de cuenta de destino: ";
-    cin >> cuenta_destino;
-
-    double monto;
-    cout << "Ingrese monto de la transaccion: ";
-    cin >> monto;
-
-    string fecha_hora;
-    cout << "Ingrese fecha y hora(DD/MM/AAAA-HH:mm): ";
-    cin >> fecha_hora;
-
-    string lugar;
-    cout << "Ingrese Ubicacion(Ciudad/Pais): ";
-    cin >> lugar;
-
-    transaccion* nuevaTransa = new transaccion(nuevoID, cuenta_origen, cuenta_destino, monto, fecha_hora, lugar);
-    avl->insertar(nuevaTransa);
-    guardarTransaccionEnArchivo("/workspaces/TallerEstructura3/src/data/listadoTransacciones.txt", nuevaTransa);
-
-    cout << "Transaccion agregada exitosamente con ID: " << nuevoID << endl;
-}
-
 void cargarTransaccionesDesdeArchivo(arbolAVL*& avl, const string& nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -388,22 +419,4 @@ void guardarTransaccionEnArchivo(const string& nombreArchivo, transaccion* nueva
                << nuevaTransa->getLugar();
 
     archivoOut.close();
-}
-void definirMontoSospechoso(int &maximoOriginal) {
-    cout << "Indique el monto para definir que una transaccion es sospechosa: ";
-    cin >> maximoOriginal;
-}
-void definirLapsoDeTiempoYFrecuencia(int &difEntreTran, int &cantMax) {
-
-    cout << "Indique la cantidad maxima de transacciones: ";
-    cin >> cantMax;
-    cout << "Indique el periodo de tiempo en el que puedan ocurrir como maximo " << cantMax << " transacciones: ";
-    cin >> difEntreTran;
-
-}
-void definirMaximoDeHoras(int &horasMinimas) {
-
-    cout << "Indique el minimo de horas que debe haber para realizar una transaccion en diferentes ubicaciones geograficas: ";
-    cin >> horasMinimas;
-
 }

@@ -6,3 +6,15 @@
 903	1009	7418426303170103	TallerEstructura3.exe	1b8945b55405f3e0
 4	708	7418427360389719	CMakeFiles/TallerEstructura3.dir/src/src/main.cpp.obj	515f392d50c468e5
 708	809	7418427367426822	TallerEstructura3.exe	1b8945b55405f3e0
+18	585	7418961272698904	CMakeFiles/TallerEstructura3.dir/src/src/Nodo.cpp.obj	48e15ce5e3ccfa4c
+10	701	7418961272612422	CMakeFiles/TallerEstructura3.dir/src/src/transaccion.cpp.obj	d6a0d097412d26a5
+14	909	7418961272662523	CMakeFiles/TallerEstructura3.dir/src/src/arbolAVL.cpp.obj	88a93bc176cb9e00
+5	990	7418961272567118	CMakeFiles/TallerEstructura3.dir/src/src/main.cpp.obj	515f392d50c468e5
+990	1095	7418961282425916	TallerEstructura3.exe	1b8945b55405f3e0
+4	692	7418961609782439	CMakeFiles/TallerEstructura3.dir/src/src/main.cpp.obj	515f392d50c468e5
+692	793	7418961616656238	TallerEstructura3.exe	1b8945b55405f3e0
+9	870	7418975706821249	CMakeFiles/TallerEstructura3.dir/src/src/arbolAVL.cpp.obj	88a93bc176cb9e00
+5	943	7418975706781358	CMakeFiles/TallerEstructura3.dir/src/src/main.cpp.obj	515f392d50c468e5
+943	1053	7418975716163629	TallerEstructura3.exe	1b8945b55405f3e0
+4	671	7418975768829814	CMakeFiles/TallerEstructura3.dir/src/src/main.cpp.obj	515f392d50c468e5
+672	770	7418975775510014	TallerEstructura3.exe	1b8945b55405f3e0

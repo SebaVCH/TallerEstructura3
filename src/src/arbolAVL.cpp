@@ -4,9 +4,22 @@
 
 #include "../include/arbolAVL.h"
 
+//Metodo para obtener la altura de un nodo actual, el valor del balance para corregir el arbol y el valor minimo al momento de realizar una eliminacion
 int arbolAVL::obtenerAltura(Nodo *nodo) {
     if (nodo == nullptr) return 0;
     return nodo->altura;
+
+}
+
+Nodo *arbolAVL::encontrarMinimo(Nodo *nodo) {
+
+    Nodo* actual = nodo;
+
+    while(actual->izquierdo != nullptr){
+        actual = actual->izquierdo;
+    }
+
+    return actual;
 
 }
 
@@ -15,6 +28,7 @@ int arbolAVL::obtenerBalance(Nodo *nodo) {
     return obtenerAltura(nodo->izquierdo) - obtenerAltura(nodo->derecho);
 }
 
+//Metodos de rotaciones
 Nodo *arbolAVL::rotacionLL(Nodo *nodo) {
     try {
         Nodo* nuevaRaiz = nodo->izquierdo;
@@ -54,6 +68,7 @@ Nodo *arbolAVL::rotacionRL(Nodo *nodo) {
     return rotacionRR(nodo);
 }
 
+//Constructor y destructor
 arbolAVL::arbolAVL() {
 
     raiz = nullptr;
@@ -66,6 +81,7 @@ arbolAVL::~arbolAVL() {
 
 }
 
+//Metodos de busqueda, insercion y eliminacion (Privados)
 Nodo* arbolAVL::buscarNodo(Nodo* raiz, string id) {
     if (raiz == nullptr) return nullptr;
 
@@ -76,18 +92,6 @@ Nodo* arbolAVL::buscarNodo(Nodo* raiz, string id) {
     } else {
         return buscarNodo(raiz->derecho, id);
     }
-}
-
-Nodo *arbolAVL::encontrarMinimo(Nodo *nodo) {
-
-    Nodo* actual = nodo;
-
-    while(actual->izquierdo != nullptr){
-        actual = actual->izquierdo;
-    }
-
-    return actual;
-
 }
 
 Nodo *arbolAVL::insertarNodo(Nodo *raiz, transaccion *transa) {
@@ -125,20 +129,6 @@ Nodo *arbolAVL::insertarNodo(Nodo *raiz, transaccion *transa) {
 
     return raiz;
 
-}
-
-void arbolAVL::insertar(transaccion *transa) {
-    raiz = insertarNodo(raiz,transa);
-}
-Nodo* arbolAVL::buscar(string id) {
-    Nodo* nodoEncontrado = buscarNodo(raiz, id);
-    return nodoEncontrado;
-}
-
-bool arbolAVL::eliminar(string id) {
-    bool eliminado = false;
-    raiz = eliminarNodo(raiz, id, eliminado);
-    return eliminado;
 }
 
 Nodo* arbolAVL::eliminarNodo(Nodo* raiz, string id, bool& eliminado) {
@@ -190,26 +180,28 @@ Nodo* arbolAVL::eliminarNodo(Nodo* raiz, string id, bool& eliminado) {
     return raiz;
 }
 
+//Metodos de busqueda, insercion y eliminacion (Publicos, para acceder a los privados)
+void arbolAVL::insertar(transaccion *transa) {
+    raiz = insertarNodo(raiz,transa);
+}
+
+Nodo* arbolAVL::buscar(string id) {
+    Nodo* nodoEncontrado = buscarNodo(raiz, id);
+    return nodoEncontrado;
+}
+
+bool arbolAVL::eliminar(string id) {
+    bool eliminado = false;
+    raiz = eliminarNodo(raiz, id, eliminado);
+    return eliminado;
+}
+
+//Metodo para obtener la raiz de un arbol
 Nodo *arbolAVL::obtenerRaiz() {
     return raiz;
 }
 
-void arbolAVL::obtenerSospechososMontoMaximo(Nodo *nodo, arbolAVL *&Sospechoso, int montoMaximo) {
-
-    if (nodo == nullptr) {
-        return;
-    }
-
-    obtenerSospechososMontoMaximo(nodo->izquierdo, Sospechoso,montoMaximo);
-
-    if (nodo->transa->getMonto() > montoMaximo) {
-        Sospechoso->insertar(nodo->transa);
-    }
-
-    obtenerSospechososMontoMaximo(nodo->derecho, Sospechoso,montoMaximo);
-
-}
-
+//Metodos para printear transacciones sospechosas
 void arbolAVL::printTransaccionesSospechosas(Nodo *nodo) {
 
     if (nodo == nullptr) {
@@ -227,6 +219,23 @@ void arbolAVL::printTransaccionesSospechosas(Nodo *nodo) {
     cout << "-----------------------------" << endl;
 
     printTransaccionesSospechosas(nodo->derecho);
+
+}
+
+//Metodos para obtener transacciones sopechosas por sobrepasar el monto maximo, ademas de ubicaciones y altas transacciones en cortosp periodos de tiempo
+void arbolAVL::obtenerSospechososMontoMaximo(Nodo *nodo, arbolAVL *&Sospechoso, int montoMaximo) {
+
+    if (nodo == nullptr) {
+        return;
+    }
+
+    obtenerSospechososMontoMaximo(nodo->izquierdo, Sospechoso,montoMaximo);
+
+    if (nodo->transa->getMonto() > montoMaximo) {
+        Sospechoso->insertar(nodo->transa);
+    }
+
+    obtenerSospechososMontoMaximo(nodo->derecho, Sospechoso,montoMaximo);
 
 }
 
@@ -258,7 +267,6 @@ void arbolAVL::encontrarTransaccionesFrecuentes(Nodo* nodo, queue<transaccion*>&
 
     encontrarTransaccionesFrecuentes(nodo->derecho, transaccionesRecientes, diferenciaEntreTransacciones, cantMaxDeTransferencias, Sospechoso);
 }
-
 
 void arbolAVL::obtenerSospechososFrecuencia(int diferenciaEntreTransacciones, int cantMaxDeTransferencias,arbolAVL *&Sospechoso) {
 

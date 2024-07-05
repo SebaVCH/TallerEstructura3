@@ -4,6 +4,7 @@
 
 #include "../include/Nodo.h"
 
+//Constructor
 Nodo::Nodo(transaccion *transacc) {
 
     transa = transacc;
@@ -14,6 +15,7 @@ Nodo::Nodo(transaccion *transacc) {
 
 }
 
+//Destructor
 Nodo::~Nodo() {
     delete transa;
     delete izquierdo;

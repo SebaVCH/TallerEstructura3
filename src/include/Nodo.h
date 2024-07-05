@@ -10,11 +10,13 @@ class Nodo {
 
 public:
 
+    //Atributos
     transaccion* transa;
     Nodo* izquierdo;
     Nodo* derecho;
     int altura;
 
+    //Constructor y destructor
     Nodo(transaccion* transacc);
     ~Nodo();
 
