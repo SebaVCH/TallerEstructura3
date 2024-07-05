@@ -1,3 +1,7 @@
+GITHUB: https://github.com/SebaVCH/TallerEstructura3
+
+README Integrantes: Sebastián Vega Chepillo; 21.349.057-5; sebastian.vega03@alumnos.ucn.cl Maximiliano Alfredo Pasten Nayem; 20.169.262-8; maximiliano.pasten@alumnos.ucn.cl
+
 Sistema de Gestión de Transacciones Financieras
 Descripción del Problema
 Implementar un sistema para gestionar transacciones financieras de un banco. El sistema debe permitir registrar transacciones, detectar patrones de fraude, y generar reportes detallados.
