@@ -153,7 +153,7 @@ void reporteTransaccionesSospechosas(arbolAVL *&Avl, arbolAVL *&Sospechoso,int m
     cout << endl;
 
     // Reiniciar arbol sospechoso
-    delete Sospechoso;
+    
     Sospechoso = new arbolAVL();
 
     Avl->obtenerSospechososPorUbicacion(diferenciaMaximaDeHoras, Sospechoso);
